@@ -23,6 +23,7 @@ services:
       dockerfile: Dockerfile
     image: lmboldrin/nginx:prod
     container_name: nginx
+    entrypoint: dockerize -wait tcp://app:3000 -timeout 30s nginx -g 'daemon off;'
     networks:
       - node-network
     ports:
@@ -38,6 +39,7 @@ services:
     tty: true
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
